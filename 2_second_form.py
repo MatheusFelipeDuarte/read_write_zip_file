@@ -61,13 +61,24 @@ def compactar_cada_arquivo(diretorio, ignore_zips=True):
                 zip_folder.write(os.path.join(diretorio,nome),nome)
     return len(nomes_arquivos)
 
-def compactar_diretorio(diretorio):
-    nome_zip = os.path.join(diretorio+'.zip')
-    with ZipFile(nome_zip, 'w',compression=ZIP_DEFLATED) as zip_folder:
-        nomes_arquivos = zip_folder.namelist()
-        for arquivo in nomes_arquivos():
-            zip_folder.write(os.path.join(diretorio,arquivo),arquivo)
+#compact apenas os arquivos em primeira instancia
+def compactar_diretorio_so_arquivos(diretorio,nome_zip):
+    with ZipFile(nome_zip, 'w',compression=ZIP_DEFLATED) as zip_file:
+        nomes_arquivos = zip_file.namelist()
+        for arquivo in nomes_arquivos:
+            zip_file.write(os.path.join(diretorio,arquivo),arquivo)
     return len(nomes_arquivos)
+
+# Compacta tudo recursivamente
+def compactar_diretorio_recursivo(diretorio,nome_zip):
+    with ZipFile(nome_zip, 'w',compression=ZIP_DEFLATED) as zip_file:
+        for pasta_raiz, subpasta, arquivos in os.walk(diretorio):
+            for arquivo in arquivos:
+                fullpath = os.path.join(pasta_raiz,arquivo)
+                relativa_path = os.path.relpath(fullpath, diretorio)
+                zip_file.write(fullpath,relativa_path)
+    return len([])
+
 
 if __name__ == '__main__':
     pasta = input('Digite o endereço da pasta que deseja compactar')
