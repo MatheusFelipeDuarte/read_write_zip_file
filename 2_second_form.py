@@ -85,7 +85,7 @@ if __name__ == '__main__':
     # pasta = filedialog.askdirectory()
     print(f'compactando arquivos em {pasta}: ')
     # n = compactar_cada_arquivo(pasta)
-    n = compactar_diretorio(pasta)
+    n = compactar_diretorio_recursivo(pasta)
     print(f'{n} arquivos compactados com sucesso')
 
 
